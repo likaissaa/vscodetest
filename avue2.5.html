@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<!--<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<meta content="always" name="referrer">
+	    <meta name="theme-color" content="#2932e1">-->
+		<link rel="stylesheet/less" type="text/css" href="css/styles.less" />
+		<script type="text/javascript" src="js/less.js"></script>
+		<title></title>
+		<!--		<<link rel="stylesheet" href="css/bootstrap.css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" href="css/bootstrap.css/bootstrap.min.css" />-->
+		<link rel="stylesheet" href="css/bootstrap2/bootstrap.css" />
+		<link rel="stylesheet" href="css/bazel.build.css" />
+		<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/vue2.5.js"></script>
+		<title></title>
+		<style type="text/css">
+			img {
+				cursor: pointer;
+			}
+			
+			#app {
+				padding: 20px 40px
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="app">
+			<div ref="myimg" style="display: inline-block;position: relative;">
+				<img src="img/网管地图.jpg" />
+				
+				<!--获取图片列表-->
+				<span v-for="imglist in imglists" class="hehe" style="display: inline-block;position:absolute;" @click.stop.prevent="clickimg(imglist)" style="position: absolute;" :style="{ left:imglist.x,top:imglist.y}"  data-toggle="tooltip" data-animation="fade" data-placement="top"  data-delay='{"show":"100", "hide":"100"}'  :title="imglist.title" data-trigger="click">
+						<img src="img/blueImageMarker.png" />
+				</span>
+
+			</div>
+			<div id="gate" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 id="myModalLabel">Modal header</h3>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal w80p" style="margin: 0 auto;">
+						<div class="row-fluid">
+							<div class="span6">
+								<div class="control-group">
+									<label class="control-label">经度：</label>
+									<div class="controls">
+										<input type="text" v-model="insertX" />
+									</div>
+								</div>
+								<label class="control-label">纬度：</label>
+								<div class="control-group">
+									<div class="controls">
+										<input type="text" v-model="insertY" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">关闭</a>
+					<a href="#" class="btn btn-primary">保存</a>
+				</div>
+			</div>
+
+		</div>
+	</body>
+	<script>
+		var vm = new Vue({
+			el: '#app',
+			data: {
+				isshowgate: false,
+				position: "",
+				insertX: "",
+				insertY: "",
+				imglists: []
+				/*{ x: '10%', y: '20%' ,title:'资产01'}, { x: '50%', y: '50%',title: '资产02' }*/
+			},
+			mounted:function() {
+				var that = this
+				this.getInfo(that)
+			},
+			methods: {
+				getInfo: function(that) {
+					$.ajax({
+				        url: "./test.json",
+				        type: "GET",
+				        data: {
+				        },
+				        dataType: "json",
+				        async: false,
+				        success: function(res) {
+				           console.log(res);
+				           that.imglists=res
+				           that.$nextTick(function() {
+				           	$('[data-toggle="tooltip"]').tooltip('show');	
+				           })
+				        },
+				        error: function() {
+				            alert("获取用户信息失败。")
+				        }
+				    })
+				},
+				clickimg: function(item) {
+					/*vm.insertX = item.x
+					vm.insertY = item.y
+					$('#gate').modal('toggle')*/
+				},
+
+			}
+		})
+	</script>
+
+</html>
